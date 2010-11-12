@@ -1,0 +1,110 @@
+//[]------------------------------------------------------------------------[]
+//|                                                                          |
+//|                          GVSG Graphics Library                           |
+//|                               Version 1.0                                |
+//|                                                                          |
+//|                Copyright® 2007, Paulo Aristarco Pagliosa                 |
+//|                All Rights Reserved.                                      |
+//|                                                                          |
+//[]------------------------------------------------------------------------[]
+//
+//  OVERVIEW: CircleRenderer.cpp
+//  ========
+//  Source file for circle renderer.
+
+#ifndef __CircleRenderer_h
+#include "CircleRenderer.h"
+#endif
+
+using namespace Graphics;
+
+
+//////////////////////////////////////////////////////////
+//
+// CircleRenderer implementation
+// ============
+Light*
+CircleRenderer::makeDefaultLight() const
+{
+	Vec3 p = viewToWorld((Vec3(1, 1, 1))).versor() * camera->getDistance();
+	return new Light(p, Color::gray);
+}
+
+void
+CircleRenderer::startRender()
+{
+	// do nothing
+}
+
+void
+CircleRenderer::endRender()
+{
+	// do nothing
+}
+
+void
+CircleRenderer::render()
+{
+	startRender();
+	if (renderMode == Wireframe)
+		renderWireframe();
+	else if (scene->getNumberOfLights() != 0)
+		renderPoly();
+	else
+	{
+		Light* light = makeDefaultLight();
+
+		scene->addLight(light);
+		renderPoly();
+		scene->deleteLight(light);
+	}
+	endRender();
+}
+
+void
+CircleRenderer::drawAABB(const BoundingBox& box) const
+{
+	Vec3 p1 = box.getP1();
+	Vec3 p7 = box.getP2();
+	Vec3 p2(p7.x, p1.y, p1.z);
+	Vec3 p3(p7.x, p7.y, p1.z);
+	Vec3 p4(p1.x, p7.y, p1.z);
+	Vec3 p5(p1.x, p1.y, p7.z);
+	Vec3 p6(p7.x, p1.y, p7.z);
+	Vec3 p8(p1.x, p7.y, p7.z);
+
+	drawLine(p1, p2);
+	drawLine(p2, p3);
+	drawLine(p3, p4);
+	drawLine(p1, p4);
+	drawLine(p5, p6);
+	drawLine(p6, p7);
+	drawLine(p7, p8);
+	drawLine(p5, p8);
+	drawLine(p3, p7);
+	drawLine(p2, p6);
+	drawLine(p4, p8);
+	drawLine(p1, p5);
+}
+
+//////////////////////////////////
+
+Vec3*
+makeCircle(const Vec3& center, const Vec3& startPoint, const Vec3& normal, int seg = 10)
+{
+	Vec3* points = new Vec3[seg];
+	
+	Transf3 m;
+	
+	// define rotação, com ponto fixo 'center', em relação ao eixo 'normal' em 360/seg graus
+	m.rotation(center, normal, Math::toRadians<REAL>(360.0f/seg));
+	
+	points[0] = startPoint;
+	
+	for(int = 1; i < seg; i++)
+	{
+		points[i] = m.transform(points[i-1]);
+	}
+	
+	return points;
+}
