@@ -142,7 +142,7 @@ renderCallback()
 		frame->draw();
 	}
 	// Swap buffers
-  glutSwapBuffers();
+	glutSwapBuffers();
 }
 
 /**
@@ -309,7 +309,7 @@ initGlut(int argc, char** argv)
  * --------------------------------------------------------------------------
  * The return value of glutCreateWindow() is the window identifier.
  */
-	int mainW = glutCreateWindow("Renderer");
+	int mainW = glutCreateWindow("Super Awesome 3D Render");
 	int left = glutCreateSubWindow(mainW, 0, 0, 500, 500);
 	int right = glutCreateSubWindow(mainW, 501, 0, 500, 500);
 /**
@@ -542,7 +542,7 @@ main(int argc, char** argv)
 /**
  * Print controls.
  */
-//	printControls();
+	printControls();
 /**
  * Call function for initializing GLUT.
  */
@@ -550,10 +550,10 @@ main(int argc, char** argv)
 /**
  * Create scene, camera, GL renderer, and ray tracer.
  */
-//	scene = createScene(L"scene1");
-//	camera = createCamera();
-//	renderer = new GLRenderer(*scene, camera);
-//	rayTracer = new RayTracer(*scene, camera);
+	scene = createScene(L"scene1");
+	camera = createCamera();
+	renderer = new GLRenderer(*scene, camera);
+	rayTracer = new RayTracer(*scene, camera);
 /**
  * Lets tell GLUT that we're ready to get in the application event
  * processing loop. GLUT provides a function that gets the application
