@@ -24,7 +24,7 @@ bool Sphere::intersect(const Ray& r, Graphics::IntersectInfo& info) const
 
 	float C = (r.origin - this->center) * (r.origin - this->center) - (this->radius * this->radius);
 
-	float D = B * B - 4.0f*C;
+	float D = B * B - 4.0f * C;
 
 	if(D >= 0 && (info.distance = (-B - sqrt(D)) / 2.0f) > 0)
 	{
@@ -48,6 +48,10 @@ Material* Sphere::getMaterial()
 
 BoundingBox Sphere::getBoundingBox() const
 {
+	Vec3 p1 = Vec3( this->center.x - this->radius, this->center.y - this->radius, this->center.z - this->radius );
+	Vec3 p2 = Vec3( this->center.x + this->radius, this->center.y + this->radius, this->center.z + this->radius );
+
+	new BoundingBox( p1 , p2);
 }
 
 TriangleMesh* Sphere::getMesh()
@@ -80,7 +84,7 @@ TriangleMesh* Sphere::getMesh()
 	p.y += this->radius;
 
 	// first normal is perpendicular with p and startPoint, at the same time (cross product)
-	Vec3 normal = p.cross(startPoint);
+	normal = p.cross(startPoint);
 
 	// gera um meio-círculo
 	// define rotação, com ponto fixo 'center', em relação ao eixo 'normal' em 180/seg graus
@@ -114,12 +118,12 @@ TriangleMesh* Sphere::getMesh()
 	}
 
 	data.normals[0] = (data.vertices[0] - this->center) * invR;
-	data.normals[nv - 1] = (data.vertices[i] - this->center) * invR;
+	data.normals[nv - 1] = (data.vertices[0] - this->center).inverse() * invR;
 
 	TriangleMesh::Triangle* t = data.triangles;
 
 	// j são os vértices, i é a linha da circunferencia
-	for(int j = 1; j < this->nv - 1; j++)
+	for(int j = 1; j < nv - 1; j++)
 	{
 		t->v[0] = j;
 		t->v[1] = j - this->segs;

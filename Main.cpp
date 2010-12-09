@@ -563,6 +563,6 @@ main(int argc, char** argv)
  * void glutMainLoop()
  * --------------------------------------------------------------------------
  */
-//	glutMainLoop();
+	glutMainLoop();
 	return 0;
 }

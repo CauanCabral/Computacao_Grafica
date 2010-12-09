@@ -19,6 +19,10 @@
 #include "Model.h"
 #endif
 
+#ifndef __TriangleMesh_h
+#include "TriangleMesh.h"
+#endif
+
 namespace Graphics
 { // begin namespace Graphics
 
