@@ -119,7 +119,7 @@ TriangleMesh* Sphere::getMesh()
 	TriangleMesh::Triangle* t = data.triangles;
 
 	// j são os vértices, i é a linha da circunferencia
-	for(int j = 1, i = 0; j < this->nv;)
+	for(int j = 1; j < this->nv - 1; j++)
 	{
 		t->v[0] = j;
 		t->v[1] = j - this->segs;
@@ -131,12 +131,23 @@ TriangleMesh* Sphere::getMesh()
 		t->v[1] = j + 1;
 		t->v[2] = j+1-this->segs;
 
-		// quando chega ao final da linha
-		if(j%seg == 0)
-			++i;
-
-		j++;
 		t++;
+	}
+
+	// triangulos dos polos
+	for(int j = 1; j < this->segs; j++)
+	{
+		// polo zero
+		t->v[0] = 0;
+		t->v[1] = this->segs * j;
+		t->v[2] = this->segs * (j + 1);
+
+		t++;
+
+		// polo nv
+		t->v[0] = nv - 1;
+		t->v[1] = (this->segs - 1) * j;
+		t->v[2] = (this->segs - 1) * (j + 1);
 	}
 
 	return new TriangleMesh(data);
